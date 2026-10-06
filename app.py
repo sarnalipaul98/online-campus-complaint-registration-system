@@ -20,10 +20,12 @@ app.permanent_session_lifetime = timedelta(days=7)
 # ---------------- DATABASE CONNECTION ----------------
 def get_db():
     return mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="",
-        database="campus_complaints"
+        host=os.getenv("DB_HOST"),
+        port=int(os.getenv("DB_PORT", "3306")),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME", "campus_complaints"),
+        ssl_disabled=False
     )
 
 # ---------------- INDEX ----------------

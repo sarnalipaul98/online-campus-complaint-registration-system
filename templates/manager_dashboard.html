@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manager Dashboard</title>
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        h2 { text-align:center; }
+
+        .flash-success {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .flash-error {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+
+        .top-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .top-actions a {
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: white;
+            margin-left: 8px;
+            margin-top: 5px;
+        }
+
+        .logout-btn { background: red; }
+        .theme-btn { padding: 8px 15px; border-radius: 5px; text-decoration: none; }
+        .change-password-btn { background: #007BFF; }
+
+        .status-buttons {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .status-buttons a {
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            color: white;
+            margin: 0 5px;
+        }
+
+        .status-buttons a.active {
+            box-shadow: 0 0 8px rgba(0,0,0,0.3);
+        }
+
+        .search-box input,
+        .search-box select,
+        .search-box button {
+            padding: 8px;
+            margin-right: 5px;
+            border-radius: 4px;
+            border: 1px solid #ccc;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: center;
+            vertical-align: top;
+        }
+
+        img {
+            width: 120px;
+            border-radius: 6px;
+        }
+
+        .btn {
+            background: green;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            text-decoration: none;
+        }
+
+        .btn-submit { background: green; color: white; padding: 5px 10px; border-radius: 4px; border:none; cursor:pointer; }
+        .btn-edit { background: orange; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; }
+        .btn-delete { background: red; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; }
+
+        textarea { width: 160px; }
+
+        body.light { background: #f4f4f4; color: #000; }
+        body.light table { background: white; }
+        body.light th { background: #007BFF; color: white; }
+        body.light .theme-btn { background: #333; color: white; }
+        body.light .status-buttons a.pending { background: orange; }
+        body.light .status-buttons a.resolved { background: green; }
+        body.light .status-buttons a.all { background: grey; }
+
+        body.dark { background: #121212; color: #f1f1f1; }
+        body.dark table { background: #1e1e1e; }
+        body.dark th { background: #333; color: white; }
+        body.dark td { border-color: #555; }
+        body.dark input,
+        body.dark select,
+        body.dark textarea { background: #2c2c2c; color: white; border: 1px solid #555; }
+        body.dark button { border: none; }
+        body.dark .theme-btn { background: #f1f1f1; color: #000; }
+        body.dark a { color: #90caf9; }
+        body.dark .status-buttons a.pending { background: orange; color: #000; }
+        body.dark .status-buttons a.resolved { background: green; color: #000; }
+        body.dark .status-buttons a.all { background: grey; color: #000; }
+        body.dark .change-password-btn { background: #007BFF; color: white; }
+
+        .btn-admin-chat {
+    display: inline-block;
+    background: #ffc107;   /* yellow */
+    color: white;
+    padding: 6px 12px;
+    border-radius: 4px;
+    text-decoration: none;
+    margin-top: 5px;
+}
+
+.btn-admin-chat:hover {
+    background: #e0a800;
+}
+
+.action-pending {
+    background: red;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.action-resolved {
+    background: green;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 4px;
+    text-decoration: none;
+    display: inline-block;
+    cursor: default;
+}
+    </style>
+</head>
+
+<body class="{{ theme }}">
+
+<div style="position: relative; margin-bottom: 15px;">
+    
+    <!-- Center Heading -->
+    <h2 style="text-align: center; margin: 0;">
+        Manager Dashboard – Complaints
+    </h2>
+
+    <!-- Back Button (RIGHT SIDE) -->
+    <a href="{{ url_for('manager_home') }}" 
+       style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+              background-color: #007bff; color: white; padding: 6px 12px; 
+              border-radius: 5px; text-decoration: none; font-weight: bold;">
+        ⬅ Back to Home
+    </a>
+
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            {% if category == 'success' %}
+                <div class="flash-success">{{ message }}</div>
+            {% else %}
+                <div class="flash-error">{{ message }}</div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="top-actions">
+
+    <form method="get" class="search-box">
+        <input type="text" name="search"
+               placeholder="Student ID or Complaint ID"
+               value="{{ request.args.get('search','') }}">
+
+        <select name="sort">
+            <option value="id">Complaint ID</option>
+            <option value="student_id">Student ID</option>
+            <option value="status">Status</option>
+            <option value="applied_time">Applied Time</option>
+        </select>
+
+        <select name="order">
+            <option value="ASC">Ascending</option>
+            <option value="DESC" selected>Descending</option>
+        </select>
+
+        <button type="submit">Apply</button>
+    </form>
+
+    <div>
+        <a class="theme-btn" href="{{ url_for('toggle_theme') }}">
+            {% if theme == 'dark' %} ☀ Light {% else %} 🌙 Dark {% endif %}
+        </a>
+        <a class="change-password-btn" href="{{ url_for('change_password') }}">Change Password</a>
+        <a class="logout-btn" href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</div>
+
+<div class="status-buttons">
+    <a href="{{ url_for('manager_dashboard', status='Pending') }}" 
+       class="pending {% if status_filter=='Pending' %}active{% endif %}">Pending</a>
+    <a href="{{ url_for('manager_dashboard', status='Resolved') }}" 
+       class="resolved {% if status_filter=='Resolved' %}active{% endif %}">Resolved</a>
+    <a href="{{ url_for('manager_dashboard') }}" 
+       class="all {% if status_filter=='All' %}active{% endif %}">All</a>
+</div>
+
+<table>
+<tr>
+    <th>ID</th>
+    <th>Student Name</th>
+    <th>Student ID</th>
+<th>Phone</th>
+<th>Year</th>
+<th>Student Type</th>
+    <th>Department</th>
+    <th>Category</th>
+    <th>Description</th>
+    <th>Attachment</th>
+    <th>Admin Message</th>
+    <th>Manager Message</th>    
+    <th>Action Taken</th>
+    <th>Status</th>
+    <th>Applied Time</th>
+    <th>Resolved Time</th>
+    <th>Action</th>
+    
+    <th>Tracking Update</th>
+</tr>
+
+{% for c in complaints %}
+<tr>
+    <td>{{ c[0] }}</td>
+    <td>{{ c[1] }}</td>
+    <td>{{ c[2] }}</td>
+
+<td>{{ c[12] }}</td>
+<td>{{ c[13] }}</td>
+<td>{{ c[14] }}</td>
+
+    <td>{{ c[3] }}</td>
+    <td>{{ c[4] }}</td>
+    <td>{{ c[5] }}</td>
+    <td>
+        {% if c[6] %}
+            <a href="{{ url_for('static', filename='uploads/' + c[6]) }}" target="_blank">
+                <img src="{{ url_for('static', filename='uploads/' + c[6]) }}">
+            </a>
+        {% else %}
+            No Attachment
+        {% endif %}
+    </td>
+
+<td>
+    {% if c[10] %}
+        {{ c[10] }}
+    {% else %}
+        -
+    {% endif %}
+</td>
+
+
+    <!-- MANAGER MESSAGE (UNCHANGED) -->
+    <td>
+    {% set edit_id = edit_id or 0 %}
+    {% if edit_id == c[0] %}
+        <form method="post" action="{{ url_for('manager_message', id=c[0]) }}">
+            <textarea name="manager_message" rows="2">{{ c[15] if c[15] else '' }}</textarea><br>
+            <div style="margin-top:5px; display:flex; gap:5px; justify-content:center; flex-wrap:wrap;">
+                <button class="btn-submit" type="submit">Submit</button>
+                <a class="btn-delete" href="{{ url_for('delete_manager_message', id=c[0]) }}">Delete</a>
+            </div>
+        </form>
+    {% else %}
+        {% if c[15] %}
+            <div style="margin-bottom:5px;">{{ c[15] }}</div>
+            <div style="display:flex; gap:5px; justify-content:center; flex-wrap:wrap;">
+                <a class="btn-edit" href="{{ url_for('edit_manager_message', id=c[0]) }}">Edit</a>
+                <a class="btn-delete" href="{{ url_for('delete_manager_message', id=c[0]) }}">Delete</a>
+            </div>
+        {% else %}
+            <form method="post" action="{{ url_for('manager_message', id=c[0]) }}">
+                <textarea name="manager_message" placeholder="Enter message" rows="2"></textarea><br>
+                <button class="btn-submit" type="submit">Submit</button>
+            </form>
+        {% endif %}
+    {% endif %}
+</td>
+    <!-- ONLY NEW COLUMN -->
+    
+<td>
+    {% if c[11] %}
+        <!-- Show proof image -->
+        <a href="{{ url_for('static', filename='uploads/' + c[11]) }}" target="_blank">
+            <img src="{{ url_for('static', filename='uploads/' + c[11]) }}">
+        </a>
+        <br><br>
+
+        <!-- Delete button -->
+        <a class="btn-delete"
+           href="{{ url_for('delete_proof', id=c[0]) }}"
+           onclick="return confirm('Delete this proof image?')">
+           Delete Proof
+        </a>
+
+    {% else %}
+        <!-- Show upload form if proof does not exist -->
+         <form action="{{ url_for('manager_resolve', id=c[0]) }}" method="POST" enctype="multipart/form-data">        
+            <input type="file" name="proof_image" required><br><br>
+            <button class="btn-submit" type="submit">Upload</button>
+        </form>
+    {% endif %}
+</td>
+    <td>
+    {% set status = c[7]|default('')|trim|lower %}
+    {% if status == 'pending' %}
+        <span class="action-pending">Pending</span>
+    {% elif status == 'resolved' %}
+        <span class="action-resolved">Resolved</span>
+    {% else %}
+        {{ c[7] }}
+    {% endif %}
+</td>
+    <td>{{ c[8] }}</td>
+    <td>{% if c[7]=='Resolved' %}{{ c[9] }}{% else %}-{% endif %}</td>
+
+<td>
+    {% set status = c[7]|default('')|trim|lower %}
+    {% if status == 'pending' %}
+        <a class="action-pending" href="{{ url_for('manager_resolve', id=c[0]) }}">Pending</a>
+    {% elif status == 'resolved' %}
+        <span class="action-resolved">Resolved</span>
+    {% else %}
+        {{ c[7] }}
+    {% endif %}
+
+    <br><br>
+
+    <!-- MESSAGE BUTTON -->
+    <a class="btn-edit"
+       href="{{ url_for('manager_chat', complaint_id=c[0]) }}">
+       Message
+    </a>
+
+<br><br>
+
+<a class="btn-admin-chat"
+   href="{{ url_for('manager_admin_chat', complaint_id=c[0]) }}">
+   Chat with Admin
+</a>
+
+</td>
+
+<td>
+    <form method="POST" action="/update_progress">
+        <input type="hidden" name="complaint_id" value="{{ c[0] }}">
+
+       <select name="progress">
+    <option value="0" {% if c[16] == 0 %}selected{% endif %}>Complaint Submitted</option>
+    <option value="20" {% if c[16] == 20 %}selected{% endif %}>Received By manager</option>
+    <option value="40" {% if c[16] == 40 %}selected{% endif %}>Verification Done</option>
+    <option value="60" {% if c[16] == 60 %}selected{% endif %}>Work in progress</option>
+    <option value="80" {% if c[16] == 80 %}selected{% endif %}>Finalizing Work</option>
+    <option value="100" {% if c[16] == 100 %}selected{% endif %}>Solved Successfully</option>
+</select>
+        <br><br>
+        <button class="btn-submit" type="submit">Update</button>
+    </form>
+</td>
+
+</tr>
+{% endfor %}
+</table>
+
+</body>
+</html>

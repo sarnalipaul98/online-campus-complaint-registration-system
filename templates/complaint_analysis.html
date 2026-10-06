@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Complaint Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: url("/static/Backgrnd.jpg") no-repeat center center fixed;
+            background-size: cover;
+        }
+        .container {
+            width: 95%;
+            max-width: 1000px;
+            margin: 50px auto;
+            background: rgba(255,255,255,0.85);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            text-align: center;
+        }
+        h2 {
+            margin-bottom: 25px;
+        }
+        img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+        }
+        a.btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+        a.btn:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{{ url_for('admin_home') }}" class="btn">⬅ Back to Home</a>
+        <h2>📊 Complaints Over Time</h2>
+        <img src="{{ graph_url }}" alt="Complaints Over Time">
+    </div>
+</body>
+</html>

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Complaint Tracking</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            margin: 20px; 
+            text-align: center;
+
+            /* ADD THIS FOR BACKGROUND IMAGE */
+        background: url('{{ url_for("static", filename="BG.jpg") }}') no-repeat center center fixed;
+        background-size: cover;
+        color: black; /* text color over background */
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .info {
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+
+        .chart-container {
+            width: 800px;   
+            height: 600px;  
+            margin: auto;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+/* RIGHT SIDE SMALL BOX */
+.progress-box {
+    position: fixed;      /* stays on screen */
+    top: 120px;           /* adjust vertical position */
+    right: 20px;          /* stick to right side */
+    width: 230px;         /* small size */
+    background: rgba(255, 255, 255, 0.9);
+    padding: 12px;
+    border-radius: 10px;
+    text-align: left;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* EACH STEP */
+.step {
+    padding: 8px;
+    margin-bottom: 8px;
+    border-left: 4px solid #007BFF;
+    background: #f1f1f1;
+    border-radius: 5px;
+    font-size: 13px;
+    font-weight: bold;
+}
+
+/* HOVER EFFECT */
+.step:hover {
+    background: #dfe9ff;
+    transform: translateX(5px);
+    transition: 0.3s;
+}
+    </style>
+</head>
+
+<body>
+
+    <div style="display:flex; justify-content:flex-end; margin-bottom:20px;">
+        <a href="{{ url_for('student_home') }}" 
+           style="text-decoration:none; background:#007BFF; color:white; padding:8px 15px; border-radius:5px;">
+           ← Back to Home
+        </a>
+    </div>
+
+    <div class="title">Complaint Tracking</div>
+
+    <!-- SAME LEFT STYLE -->
+    <div class="info" style="text-align: left; display: inline-block;">
+        <strong>Name:</strong> {{ student_name }} <br>
+        <strong>ID:</strong> {{ student_id }}
+    </div>
+
+    <!-- REPLACED CANVAS WITH IMAGE -->
+    <div class="chart-container">
+        <img src="/{{ image }}?t={{ range(1,1000)|random }}">
+    </div>
+<div class="progress-box">
+    <div class="step">0% - Complaint Submitted</div>
+    <div class="step">20% - Received by Manager</div>
+    <div class="step">40% - Verified by Manager</div>
+    <div class="step">60% - Work in Progress</div>
+    <div class="step">80% - Finalizing Work</div>
+    <div class="step">100% - Solved Successfully</div>
+</div>
+
+</body>
+</html>

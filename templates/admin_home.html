@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Home</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: url('{{ url_for("static", filename="Backgrnd.jpg") }}') no-repeat center center fixed;
+    background-size: cover;
+            
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            margin-bottom: 40px;
+            color: #2c3e50;
+        }
+
+        /* 🔝 Top Right Button */
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+        }
+
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #34495e;
+            transform: scale(1.05);
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+        }
+
+        .row {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        .box {
+            flex: 1;
+            height: 180px;
+            border-radius: 15px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 23px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        /* Top row stats boxes (Total, Pending, Resolved) */
+.top-stats .box {
+    flex: 1;                    /* evenly spaced boxes */
+    height: 120px;              /* smaller height than main boxes */
+    font-size: 18px;            /* smaller text */
+    font-weight: bold;
+    border-radius: 12px;        /* slightly rounded corners */
+    display: flex;
+    flex-direction: column;     /* stack text and number */
+    justify-content: center;
+    align-items: center;
+    color: black;               /* text color white */
+    background: white;            /* background red */
+    cursor: default;            /* no pointer effect */
+    box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+
+.top-stats .box .score {
+    font-size: 30px;            /* number size */
+    margin-top: 8px;            /* space between title and number */
+    color: blue;               /* number text white */
+    font-weight: bold; 
+}
+        /* 🔥 Hover Highlight */
+        .box:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+            filter: brightness(1.1);
+        }
+
+        .box:hover::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            border-radius: 15px;
+            border: 2px solid rgba(255,255,255,0.7);
+        }
+
+        .box-content {
+            text-align: center;
+        }
+
+        .icon {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        /* 🎨 Colors */
+        .all { background: linear-gradient(135deg, #6a11cb, #2575fc); }
+        .pending { background: linear-gradient(135deg, #f7971e, #ffd200); }
+        .resolved { background: linear-gradient(135deg, #00b09b, #96c93d); }
+        .new { background: linear-gradient(135deg, #56ccf2, #2f80ed); }
+        .priority { background: linear-gradient(135deg, #ff416c, #ff4b2b); }
+        .overdue { background: linear-gradient(135deg, #8e2de2, #4a00e0); }
+        .analysis { background: linear-gradient(135deg, #2c3e50, #4ca1af); }
+        .feedback { background: linear-gradient(135deg, #fc466b, #3f5efb); }
+
+        /* ⭐ Satisfaction + Graph Section */
+        .analytics {
+            margin-top: 40px;
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-bottom: 50px; /* ADD THIS: space below analytics before next row */
+}
+        department-row {
+    margin-top: 40px;  /* space between analytics and this row */
+}
+        
+
+        .score-card, .chart-box {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            flex: 1;
+
+                    }
+
+        .score {
+            font-size: 45px;
+            color: green;
+            font-weight: bold;
+        }
+
+        .chart-box img {
+            width: 100%;
+            border-radius: 10px;
+            
+        }
+         
+        .box-link {
+    display: block;             /* ensures the link behaves like a div */
+    text-decoration: none;      /* remove underline */
+}
+      
+
+.department-card {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    flex: 0 0 41%;      /* width similar to Overall Satisfaction */
+        cursor: pointer;
+    min-width: 300px;   /* prevents shrinking too small */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    margin-left: 70px;
+    
+}
+
+.department-card img {
+    width: 100%;
+    border-radius: 10px;
+    margin-top: 15px;
+}
+ </style>
+</head>
+
+<body>
+
+<!-- 🔐 Change Password Button -->
+
+<!-- 🔐 Change Password and Logout Buttons -->
+<div class="top-bar" style="display: flex; justify-content: flex-end; align-items: center; gap: 10px;">
+    <a href="/change_password?next=admin_home" class="btn">🔐 Change Password</a>
+    
+    <a href="{{ url_for('logout') }}" 
+       style="padding: 8px 15px; background-color: #f44336; color: white; 
+              border-radius: 5px; text-decoration: none;">
+       Logout
+    </a>
+</div>
+
+<h1>Admin Home</h1>
+
+<div class="container">
+
+
+<div class="row top-stats">
+    <div class="box total">
+        <div class="box-content">
+            Total Complaints
+            <div class="score">{{ total_complaints }}</div>
+        </div>
+    </div>
+    <div class="box pending">
+        <div class="box-content">
+            Pending Complaints
+            <div class="score">{{ pending_complaints }}</div>
+        </div>
+    </div>
+    <div class="box resolved">
+        <div class="box-content">
+            Resolved Complaints
+            <div class="score">{{ resolved_complaints }}</div>
+        </div>
+    </div>
+</div>
+
+    <!-- Row 1 -->
+    <div class="row">
+    <div class="box all" onclick="location.href='/admin_dashboard?status=All'">
+        <div class="box-content">
+            <div class="icon"></div>
+            All Complaints
+        </div>
+    </div>
+
+    <div class="box pending" onclick="location.href='/admin_dashboard?status=Pending'">
+        <div class="box-content">
+            <div class="icon"></div>
+            Pending Complaints
+        </div>
+    </div>
+
+    <div class="box resolved" onclick="location.href='/admin_dashboard?status=Resolved'">
+        <div class="box-content">
+            <div class="icon"></div>
+            Resolved Complaints
+        </div>
+    </div>
+</div>
+
+<!-- Additional boxes as before -->
+
+    <!-- Row 2 -->
+         
+      <div class="row">
+    <div class="box new" onclick="location.href='/admin_dashboard?status=New'">
+        <div class="box-content">
+            <div class="icon"></div>
+            New Complaints
+        </div>
+    </div>
+
+        <div class="box priority" onclick="location.href='/admin_dashboard?status=Priority'">
+    <div class="box-content">
+        <div class="icon"></div>
+        High Priority Complaints
+    </div>
+</div>
+
+        <div class="box overdue" onclick="location.href='/admin_dashboard?status=Overdue'">
+        <div class="box-content">
+            <div class="icon"></div>
+            Overdue Complaints
+        </div>
+    </div>
+</div>
+
+    <div class="row">
+    <!-- Complaint Analysis box clickable -->
+    <div class="box analysis" onclick="location.href='{{ url_for('complaint_analysis') }}'">
+        <div class="box-content">
+            <div class="icon"></div>
+            Complaint Analysis
+        </div>
+    </div>
+
+       
+   <!-- Feedback Box: clickable without changing style -->
+    <div class="box feedback" onclick="location.href='{{ url_for('admin_feedback') }}'">
+        <div class="box-content">
+            <div class="icon"></div>
+            Feedback
+        </div>
+    </div>
+</div>
+
+    <!--  Analytics Section -->
+    <div class="analytics">
+
+        <!-- Satisfaction -->
+        <div class="score-card">
+            <h2>Overall Satisfaction</h2>
+            <div class="score">{{ satisfaction }}/10</div>
+            <p>Based on resolved complaints</p>
+        </div>
+
+        
+        
+
+
+</div>
+</div>
+
+
+<!-- Department-wise Complaints Row -->
+<div class="row" style="display: flex; gap: 30px; flex-wrap: wrap; margin-top: 40px;">
+
+
+<div class="row" style="margin-top: 40px; justify-content: flex-start;">
+    <div class="department-card">
+        <h2>Department-wise Complaints</h2>
+        <canvas id="deptChart"></canvas>   </div>
+
+
+<!-- Graph -->
+
+<div class="chart-box">
+    <h2>Complaint Statistics (Month-wise)</h2>
+    <img src="{{ bar_graph_url }}" alt="Complaint Bar Graph">
+
+
+<!-- Left column: Jan to Jun -->
+<div style="text-align: left;">
+    {% for month, count in month_counts_first_half %}
+        <div>{{ month }}: {{ count }}</div>
+    {% endfor %}
+</div>
+
+<!-- Right column: Jul to Dec -->
+<div style="text-align: left;">
+    {% for month, count in month_counts_second_half %}
+        <div>{{ month }}: {{ count }}</div>
+    {% endfor %}
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const ctx = document.getElementById('deptChart').getContext('2d');
+
+new Chart(ctx, {
+    type: 'pie',
+    data: {
+        labels: {{ departments | tojson }},
+        datasets: [{
+            data: {{ counts | tojson }},
+            backgroundColor: [
+                '#FF6384',
+                '#36A2EB',
+                '#FFCE56',
+                '#4BC0C0',
+                '#9966FF',
+                '#FF9F40',
+                '#8AC926'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'bottom'
+            },
+            tooltip: {
+                callbacks: {
+                    label: function(context) {
+                        let label = context.label || '';
+                        let value = context.raw;
+                        let total = context.chart._metasets[0].total;
+                        let percentage = ((value / total) * 100).toFixed(1);
+                        return label + ': ' + value + ' (' + percentage + '%)';
+                    }
+                }
+            }
+        }
+    }
+});
+</script>
+
+
+
+</body>
+</html>

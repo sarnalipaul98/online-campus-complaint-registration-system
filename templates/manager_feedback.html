@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manager Feedback</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            padding: 20px; 
+            background-image: url("{{ url_for('static', filename='Backgrnd.jpg') }}");
+            background-size: cover;       /* cover the whole screen */
+            background-repeat: no-repeat;
+            background-position: center;
+            background-attachment: fixed; /* stays in place when scrolling */
+        }
+        .card { 
+            border: 1px solid #ccc; 
+            border-radius: 10px; 
+            padding: 20px; 
+            margin-bottom: 20px; 
+            box-shadow: 2px 2px 10px #aaa;
+            background-color: rgba(255, 255, 255, 0.9); /* semi-transparent so background shows */
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
+        .star { 
+            color: gold; 
+            font-size: 20px; 
+        }
+        .no-feedback { 
+            color: red; 
+            font-weight: bold; 
+        }
+        h3 { margin: 5px 0; }
+        p { margin: 5px 0; }
+    </style>
+</head>
+<body>
+    <!-- Heading with Back to Home Button -->
+<div style="position: relative; margin-bottom: 15px;">
+    <!-- Centered Heading -->
+    <h2 style="color: black; text-shadow: 1px 1px 3px black; text-align: center; margin: 0;">
+        Student Feedback
+    </h2>
+
+    <!-- Right Corner Button -->
+    <a href="{{ url_for('manager_home') }}" 
+       style="position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+              background-color: #007bff; color: white; padding: 6px 12px; 
+              border-radius: 5px; text-decoration: none; font-weight: bold;">
+        ⬅ Back to Home
+    </a>
+</div>
+
+<!-- ✅ Search Form goes here -->
+    <div style="margin: 20px 0; display: flex; justify-content: flex-start; align-items: center;">
+        <form method="GET" action="{{ url_for('manager_feedback') }}" style="display: flex; gap: 10px; align-items: center;">
+            <input type="text" name="student_id" placeholder="Enter Student ID" 
+                   value="{{ request.args.get('student_id', '') }}" 
+                   style="padding: 6px; border-radius: 5px; border: 1px solid #ccc;">
+            <button type="submit" 
+                    style="padding: 6px 12px; border-radius: 5px; border: none; background-color: #28a745; color: white; font-weight: bold; cursor: pointer;">
+                Apply
+            </button>
+        </form>
+    </div>
+
+
+    {% for f in feedbacks %}
+    <div class="card">
+        <h3>Complaint ID: {{ f[0] }}</h3>
+        <p><strong>Student Name:</strong> {{ f[1] }}</p>
+        <p><strong>Student ID:</strong> {{ f[2] }}</p>
+        <p><strong>Department:</strong> {{ f[3] }}</p>
+        <p><strong>Category:</strong> {{ f[4] }}</p>
+        <p><strong>Rating:</strong> 
+            {% if f[5] %}
+                {% for i in range(f[5]|int) %}
+                    <span class="star">&#9733;</span>
+                {% endfor %}
+            {% else %}
+                <span class="no-feedback">Feedback not provided</span>
+            {% endif %}
+        </p>
+    </div>
+    {% endfor %}
+</body>
+</html>

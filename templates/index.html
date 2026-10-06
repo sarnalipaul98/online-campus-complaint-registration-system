@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Online Complaint System</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: Arial;
+            background: url("{{ url_for('static', filename='campus_index.jpg') }}") no-repeat center center/cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+        }
+
+        .container {
+            position: relative;
+            text-align: center;
+            color: white;
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 30px;
+        }
+
+        a {
+            display: block;
+            margin: 10px auto;
+            max-width: 250px;
+            padding: 15px;
+            background: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+        }
+
+        @media (min-width: 600px) {
+            a { display: inline-block; margin: 10px; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Online Campus Complaint Registration System</h2>
+    <a href="/student">Student Login</a>
+    <a href="/manager">Complaint Manager Login</a>
+    <a href="/admin">Admin Login</a>
+</div>
+</body>
+</html>

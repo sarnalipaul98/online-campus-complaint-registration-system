@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Chat</title>
+
+    <style>
+
+        body {
+            font-family: Arial;
+            background: #f4f4f4;
+            padding: 20px;
+        }
+
+        .chat-container {
+            width: 500px;
+            margin: auto;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .chat-box {
+            height: 300px;
+            overflow-y: scroll;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .student {
+            color: blue;
+            margin-bottom: 8px;
+        }
+
+        .manager {
+            color: green;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+            width: 75%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background: blue;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background: darkblue;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-top: 10px;
+            text-decoration: none;
+            background: gray;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 5px;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<div class="chat-container">
+
+<h2>Chat with Manager</h2>
+
+<div class="chat-box">
+
+{% for chat in chats %}
+    {% if chat.sender == session.username %}
+        <div class="student">
+            <b>you:</b> {{ chat.message }}<br>
+            <small>{{ chat.timestamp }}</small>
+        </div>
+    {% else %}
+        <div class="manager">
+            <b>{{ chat.sender }}:</b> {{ chat.message }}<br>
+            <small>{{ chat.timestamp }}</small>
+        </div>
+    {% endif %}
+
+<hr>
+{% endfor %}
+
+</div>
+
+<form method="POST">
+<input type="text" name="message" placeholder="Type message..." required>
+<button type="submit">Send</button>
+</form>
+
+<a class="back-btn" href="{{ url_for('student_home') }}">Back to Home</a>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manager Home</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: url('{{ url_for("static", filename="Backgrnd.jpg") }}') no-repeat center center fixed;
+            background-size: cover;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        h1 {
+            margin-bottom: 40px;
+            color: #2c3e50;
+        }
+
+        .top-bar {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+        }
+
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #34495e;
+            transform: scale(1.05);
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+        }
+
+        .row {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        .box {
+            flex: 1;
+            height: 180px;
+            border-radius: 15px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            position: relative;
+        }
+
+        /* Top stats */
+        .top-stats .box {
+            height: 120px;
+            font-size: 18px;
+            flex-direction: column;
+            background: white;
+            color: black;
+            cursor: default;
+        }
+
+        .top-stats .score {
+            font-size: 30px;
+            margin-top: 8px;
+            color: blue;
+            font-weight: bold;
+        }
+
+        .box:hover {
+            transform: translateY(-8px) scale(1.03);
+        }
+
+        .box-content {
+            text-align: center;
+        }
+
+        .icon {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        /* Colors */
+        .all { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+        .pending { background: linear-gradient(135deg, #f6d365, #fda085); }
+        .resolved { background: linear-gradient(135deg, #43e97b, #38f9d7); }
+        .new { background: linear-gradient(135deg, #667eea, #764ba2); }
+        .priority { background: linear-gradient(135deg, #ff6a6a, #ff3d3d); }
+        .overdue { background: linear-gradient(135deg, #f7971e, #ffd200); }
+
+        .analytics {
+            margin-top: 40px;
+        }
+
+        .score-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .score {
+            font-size: 45px;
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="top-bar" style="display:flex; gap:10px;">
+    <a href="/change_password?next=manager_home" class="btn">🔐 Change Password</a>
+    <a href="{{ url_for('logout') }}" style="background:#f44336;color:white;padding:8px 15px;border-radius:5px;text-decoration:none;">
+        Logout
+    </a>
+</div>
+
+<h1>Manager Home</h1>
+
+<div class="container">
+
+    <!-- Top Stats -->
+    <div class="row top-stats">
+        <div class="box">
+            Total Complaints
+            <div class="score">{{ total_complaints }}</div>
+        </div>
+
+        <div class="box">
+            Pending Complaints
+            <div class="score">{{ pending_complaints }}</div>
+        </div>
+
+        <div class="box">
+            Resolved Complaints
+            <div class="score">{{ resolved_complaints }}</div>
+        </div>
+    </div>
+
+    <!-- Row 1 -->
+    <div class="row">
+        <div class="box all" onclick="location.href='/manager_dashboard?status=All'">
+            <div class="box-content">
+                <div class="icon"></div>
+                All Complaints
+            </div>
+        </div>
+
+        <div class="box pending" onclick="location.href='/manager_dashboard?status=Pending'">
+            <div class="box-content">
+                <div class="icon"></div>
+                Pending Complaints
+            </div>
+        </div>
+
+        <div class="box resolved" onclick="location.href='/manager_dashboard?status=Resolved'">
+            <div class="box-content">
+                <div class="icon"></div>
+                Resolved Complaints
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="row">
+        <div class="box new" onclick="location.href='/manager_dashboard?status=New'">
+            <div class="box-content">
+                <div class="icon"></div>
+                New Complaints
+            </div>
+        </div>
+
+        <div class="box priority" onclick="location.href='/manager_dashboard?status=Priority'">
+            <div class="box-content">
+                <div class="icon"></div>
+                High Priority Complaints
+            </div>
+        </div>
+
+        <div class="box overdue" onclick="location.href='/manager_dashboard?status=Overdue'">
+            <div class="box-content">
+                <div class="icon"></div>
+                Overdue Complaints
+            </div>
+        </div>
+    </div>
+
+    <div class="analytics">
+
+    <div style="display:flex; gap:20px; align-items:stretch; flex-wrap:wrap;">
+
+        <!-- LEFT: Satisfaction Card -->
+        <div class="score-card" style="flex:2;">
+            <h2>Overall Satisfaction</h2>
+            <div class="score">{{ satisfaction }}/10</div>
+            <p>Based on resolved complaints</p>
+        </div>
+
+        <!-- RIGHT: Buttons as Boxes -->
+        <div style="display:flex; flex-direction:column; gap:15px; flex:1;">
+
+            <!-- Dashboard Box -->
+            <div class="box all"
+                 onclick="location.href='{{ url_for('manager_dashboard') }}'"
+                 style="height:80px; font-size:23px;">
+                 Dashboard
+            </div>
+
+            <!-- Feedback Box -->
+            <div class="box priority"
+                 onclick="location.href='{{ url_for('manager_feedback') }}'"
+                 style="height:80px; font-size:23px;">
+                Feedback
+            </div>
+
+        </div>
+
+    </div>
+
+</div></div>
+
+</div>
+
+</body>
+</html>

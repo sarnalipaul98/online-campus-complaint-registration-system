@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Resolved Complaints</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+    body {
+        /* Background image from static folder */
+        background: url('{{ url_for("static", filename="Backgrnd.jpg") }}') no-repeat center center fixed;
+        background-size: cover;
+        /* Optional: make text readable */
+        color: black; 
+    }
+
+    /* Optional: add slight transparency to complaint boxes for readability */
+    .border {
+        background: rgba(255, 255, 255, 0.85); /* white with 85% opacity */
+    }
+</style>
+</head>
+
+<body class="{{ theme }}">
+
+<div class="container mt-4">
+
+<h2>Resolved Complaints</h2>
+
+<a href="{{ url_for('student_home') }}" class="btn btn-secondary mb-3">Back to Home</a>
+
+{% if complaints %}
+
+{% for c in complaints %}
+
+<div class="border p-3 mb-3 rounded">
+
+<b>Department:</b> {{ c[3] }} <br>
+<b>Category:</b> {{ c[4] }} <br>
+<b>Description:</b> {{ c[5] }} <br>
+<b>Phone Number:</b> {{ c[12] }} <br>
+<b>Year:</b> {{ c[13] }} <br>
+<b>Student Type:</b> {{ c[14] }} <br>
+
+{% if c[6] %}
+<b>Attachment:</b>
+<a href="{{ url_for('static', filename='uploads/' + c[6]) }}" target="_blank">
+View File
+</a>
+<br>
+{% endif %}
+
+<b>Status:</b>
+<span class="text-success">
+{{ c[7] }}
+</span>
+<br>
+
+
+
+{% if c[9] %}
+<b>Resolved Time:</b> {{ c[9].strftime('%d-%m-%Y %I:%M %p') }} <br>
+{% endif %}
+
+{% if c[10] %}
+<div class="mt-2 p-2 rounded" style="background:#e8f5e9; color:#2e7d32;">
+<b>Admin Message:</b> {{ c[10] }}
+</div>
+{% endif %}
+
+{% if c[15] %}
+<div class="mt-2 p-2 rounded" style="background:#e3f2fd; color:#0d47a1;">
+<b>Manager Message:</b> {{ c[15] }}
+</div>
+{% endif %}
+
+<b>Applied:</b> {{ c[8] }} <br>
+
+{% if c[11] %}
+<b>Resolution Proof:</b>
+<a href="{{ url_for('static', filename='uploads/' + c[11]) }}" target="_blank">
+View Proof
+</a>
+<br>
+{% endif %}
+
+
+</div>
+{% endfor %}
+
+{% else %}
+
+<p>No resolved complaints.</p>
+
+{% endif %}
+
+</div>
+
+</body>
+</html>

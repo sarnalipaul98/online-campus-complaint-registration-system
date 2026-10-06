@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin ↔ Manager Chat</title>
+
+    <style>
+        body { font-family: Arial; background:#f4f4f4; padding:20px; }
+
+        .chat-box {
+            height: 300px;
+            overflow-y: scroll;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .manager {
+            background: #d4edda;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+        }
+
+        .admin {
+            background: #f8d7da;
+            padding: 8px;
+            border-radius: 8px;
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Admin ↔ Manager Chat (Complaint ID: {{ complaint_id }})</h2>
+
+<div class="chat-box">
+
+{% for chat in chats %}
+
+    {% if chat[0] == 'manager' %}
+        <div class="manager">
+            <b>Manager:</b> {{ chat[1] }}
+        </div>
+    {% else %}
+        <div class="admin">
+            <b>Admin:</b> {{ chat[1] }}
+        </div>
+    {% endif %}
+
+    <small>{{ chat[2] }}</small>
+    <hr>
+
+{% endfor %}
+
+</div>
+
+<form method="POST">
+    <input type="text" name="message" placeholder="Type message..." required>
+    <button type="submit">Send</button>
+</form>
+
+<br>
+
+<a href="{% if session['role']=='admin' %}/admin_dashboard{% else %}/manager_dashboard{% endif %}">
+    ← Back
+</a>
+
+</body>
+</html>

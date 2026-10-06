@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Home</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            
+            background-image: url("{{ url_for('static', filename='BG.jpg') }}");
+    background-size: cover;        /* Cover the whole page */
+    background-repeat: no-repeat;  /* Don’t tile */
+    background-position: center;   /* Center the image */
+    background-attachment: fixed; 
+            padding: 30px;
+            text-align: center;
+        }
+
+        
+        h1 {
+            margin-bottom: 40px;
+            color: #2c3e50;
+        }
+
+        .container {
+            width: 90%;
+            margin: auto;
+        }
+
+        .row {
+            display: flex;
+            gap: 25px;
+            margin-bottom: 25px;
+            justify-content: center;
+        }
+
+        /* SAME SIZE AS ADMIN */
+        .box {
+            flex: 1;
+            height: 180px;
+            border-radius: 15px;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+.top-bar {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+}
+
+.student-id {
+    background: green;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: bold;
+}
+.change-password-btn {
+    background: #3498db;      /* Blue background */
+    color: white;             /* White text */
+    padding: 8px 15px;        /* Same padding as logout/student id */
+    border-radius: 8px;       /* Rounded corners */
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    margin-right: 10px;       /* Space before Logout */
+    display: inline-block;    /* Proper alignment */
+    transition: background 0.3s ease; /* Only background changes on hover */
+}
+
+.change-password-btn:hover {
+    background: #3498db;      /* Keep same blue on hover */
+    transform: none;           /* No scaling like your previous hover */
+}
+
+
+/* 🔴 Logout button */
+.logout-btn {
+    background: #e74c3c;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.logout-btn:hover {
+    background: #c0392b;
+    transform: scale(1.05);
+}
+
+        .box:hover {
+            transform: translateY(-8px) scale(1.03);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+        }
+
+        .box-content {
+            text-align: center;
+        }
+
+        .icon {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        /* COLORS (same feel as admin) */
+        .raise    { background: linear-gradient(135deg, #6a11cb, #2575fc); }   /* Purple → Blue */
+.all      { background: linear-gradient(135deg, #00c6ff, #0072ff); }   /* Sky Blue */
+.pending  { background: linear-gradient(135deg, #f7971e, #ffd200); }   /* Orange → Yellow */
+.resolved { background: linear-gradient(135deg, #00b09b, #96c93d); }   /* Green */
+.track    { background: linear-gradient(135deg, #ff416c, #ff4b2b); }   /* Pink → Red */
+.message  { background: linear-gradient(135deg, #11998e, #38ef7d); }   /* Teal → Light Green */
+.rating   { background: linear-gradient(135deg, #fc466b, #3f5efb); }   /* Pink → Blue */
+.overall  { background: linear-gradient(135deg, #ee0979, #ff6a00); }   /* Magenta → Orange */
+    </style>
+</head>
+
+<body>
+<div class="top-bar">
+    <span class="student-id">👤 {{ student_id }}</span>
+
+
+<!-- Blue Change Password button -->
+    <a href="{{ url_for('change_password') }}" class="change-password-btn">
+        Change Password
+    </a>
+
+
+    <a href="{{ url_for('logout') }}" class="logout-btn">
+        Logout
+    </a>
+</div>
+<h1>Student Home</h1>
+
+<div class="container">
+
+    <!-- Row 1 -->
+    <div class="row">
+        <div class="box raise" onclick="location.href='{{ url_for('student_dashboard') }}'">
+            <div class="box-content">
+                <div class="icon"></div>
+                Raise Complaint
+            </div>
+        </div>
+
+        
+        <div class="box all" onclick="location.href='{{ url_for('student_all') }}'">
+            <div class="box-content">
+                <div class="icon"></div>
+                All Complaints
+            </div>
+        </div>
+
+        <div class="box pending" onclick="location.href='{{ url_for('student_pending') }}'">
+            <div class="box-content">
+                <div class="icon"></div>
+                Pending Complaint
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 2 -->
+    <div class="row">
+        <div class="box resolved" onclick="location.href='{{ url_for('student_resolved') }}'">
+            <div class="box-content">
+                <div class="icon"></div>
+                Resolved Complaint
+            </div>
+        </div>
+
+        <div class="box track" onclick="location.href='{{ url_for('track_list') }}'">           
+            <div class="box-content">
+                <div class="icon"></div>
+                Track Complaint
+            </div>
+        </div>
+
+        <div class="box message" onclick="location.href='{{ url_for('student_messages') }}'">
+            <div class="box-content">
+                <div class="icon"></div>
+                Messages
+            </div>
+        </div>
+    </div>
+
+    <!-- Row 3 -->
+    <div class="row">
+        <div class="box rating" onclick="location.href='{{ url_for('rating_page') }}'">
+            <div class="box-content">
+                <div class="icon"></div>
+                Rating
+            </div>
+        </div>
+
+        <div class="box overall">
+    <div class="box-content" style="font-weight:bold; font-size:23px;">
+        <div class="icon"></div>
+        Overall Satisfaction: {{ overall_satisfaction }}/10
+    </div>
+</div>
+</div>
+
+</body>
+</html>

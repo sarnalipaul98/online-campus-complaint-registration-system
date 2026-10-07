@@ -305,13 +305,16 @@ def admin_home():
     satisfaction = round((resolved_complaints / total_complaints) * 10, 1) if total_complaints else 0
 
     # ---------- Month-wise Bar Graph ----------
-    cursor.execute("""
-        SELECT applied_time, COUNT(*) 
-        FROM complaints
-        GROUP BY YEAR(applied_time), MONTH(applied_time)
-        ORDER BY YEAR(applied_time), MONTH(applied_time)
-    """)
-    month_data = cursor.fetchall()
+cursor.execute("""
+    SELECT 
+        YEAR(applied_time) AS year,
+        MONTH(applied_time) AS month,
+        COUNT(*) AS total
+    FROM complaints
+    GROUP BY YEAR(applied_time), MONTH(applied_time)
+    ORDER BY YEAR(applied_time), MONTH(applied_time)
+""")
+month_data = cursor.fetchall()
     
 
     months = list(calendar.month_name)[1:]

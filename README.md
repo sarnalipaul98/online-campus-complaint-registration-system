@@ -93,6 +93,9 @@ Main database tables include:
 
 ## 8. Developed By
 **Sarnali Paul**
+
 Bachelor of Computer Applications (BCA)
+
 GITAM University
+
 **Project:** Online Campus Complaint Registration System

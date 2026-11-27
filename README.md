@@ -8,6 +8,7 @@ It provides separate dashboards for students, administrators, and managers to en
 ## 2. Project Links
 
 GitHub Repository: https://github.com/sarnalipaul98/online-campus-complaint-registration-system
+
 Live Application: https://online-campus-complaint-system.onrender.com
 
 ## 3. Technologies Used
